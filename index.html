@@ -1,65 +1,101 @@
 <!doctype html>
 <html lang="pt-BR">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Reksa</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Reksa</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-<main class="app">
-<section id="authView" class="card">
-<h1>Reksa</h1><p class="muted">Conversas que conectam.</p>
-<div class="tabs"><button class="tab active" data-auth="login">Entrar</button><button class="tab" data-auth="register">Criar conta</button></div>
-<form id="loginForm" class="form">
-<label>Identificador<input id="loginUsername" required placeholder="@renato"></label>
-<label>Senha<input id="loginPassword" type="password" required></label>
-<label class="check"><input id="rememberMe" type="checkbox"> Manter conectado</label>
-<button class="primary">Entrar</button>
-</form>
-<form id="registerForm" class="form hidden">
-<label>Nome<input id="registerName" required maxlength="60"></label>
-<label>Identificador<input id="registerUsername" required maxlength="30" placeholder="@renato"></label>
-<small class="muted">Letras, números, ponto, hífen e _.</small>
-<label>Senha<input id="registerPassword" type="password" required minlength="8"></label>
-<label>Confirmar senha<input id="registerPassword2" type="password" required minlength="8"></label>
-<button class="primary">Criar conta</button>
-</form>
-<p id="authMessage" class="message"></p>
-</section>
+    <main class="app">
+        <section id="authView" class="card">
+            <h1>Reksa</h1>
+            <p class="muted">Conversas que conectam.</p>
+            <div class="tabs"><button class="tab active" data-auth="login">Entrar</button><button class="tab"
+                    data-auth="register">Criar conta</button></div>
+            <form id="loginForm" class="form">
+                <label>Identificador<input id="loginUsername" required placeholder="@renato"></label>
+                <label>Senha<input id="loginPassword" type="password" required></label>
+                <label class="check"><input id="rememberMe" type="checkbox"> Manter conectado</label>
+                <button class="primary">Entrar</button>
+            </form>
+            <form id="registerForm" class="form hidden">
+                <label>Nome<input id="registerName" required maxlength="60"></label>
+                <label>Identificador<input id="registerUsername" required maxlength="30" placeholder="@renato"></label>
+                <small class="muted">Letras, números, ponto, hífen e _.</small>
+                <label>Senha<input id="registerPassword" type="password" required minlength="8"></label>
+                <label>Confirmar senha<input id="registerPassword2" type="password" required minlength="8"></label>
+                <button class="primary">Criar conta</button>
+            </form>
+            <p id="authMessage" class="message"></p>
+        </section>
 
-<section id="appView" class="hidden">
-<header class="topbar"><div><strong>Reksa</strong> <span id="meLabel" class="muted"></span></div><button id="logoutBtn" class="ghost">Sair</button></header>
-<div class="layout">
-<aside class="sidebar card">
-<div class="sidebar-actions"><button id="newChatBtn" class="primary">+ Nova conversa</button><button id="newGroupBtn" class="secondary">+ Grupo</button></div>
-<div id="conversationList" class="conversation-list"></div>
-</aside>
-<section class="chat card">
-<div id="emptyChat" class="empty"><h2>Reksa</h2><p>Escolha uma conversa ou encontre alguém pelo identificador.</p></div>
-<div id="chatView" class="hidden chat-inner">
-<header class="chat-header"><strong id="chatTitle"></strong><div id="chatSubtitle" class="muted"></div></header>
-<div id="messages" class="messages"></div>
-<form id="messageForm" class="message-form"><input id="messageInput" maxlength="1000" placeholder="Digite uma mensagem..."><button class="primary">Enviar</button></form>
-</div>
-</section>
-</div>
-</section>
-</main>
+        <section id="appView" class="hidden">
+            <header class="topbar">
+                <div><strong>Reksa</strong> <span id="meLabel" class="muted"></span></div><button id="logoutBtn"
+                    class="ghost">Sair</button>
+            </header>
+            <div class="layout">
+                <aside class="sidebar card">
+                    <div class="sidebar-actions"><button id="newChatBtn" class="primary">+ Nova conversa</button><button
+                            id="newGroupBtn" class="secondary">+ Grupo</button></div>
+                    <div id="conversationList" class="conversation-list"></div>
+                    <section class="requests-section" id="requestsSection">
+                    <div class="section-header">
+                        <h3>Solicitações</h3>
+                        <span id="requestsCount">0</span>
+                    </div>
 
-<dialog id="userDialog"><form id="userSearchForm" class="dialog-content">
-<button type="button" class="close" id="closeUserDialog">×</button><h2>Nova conversa</h2>
-<p class="muted">Digite o identificador exato da pessoa.</p><input id="userSearchInput" placeholder="@ana" required>
-<button class="primary">Encontrar</button><div id="userSearchResult"></div>
-</form></dialog>
+                    <div id="requestsList" class="requests-list">
+                        <p class="empty-state">Nenhuma solicitação.</p>
+                    </div>
+                </section>
+                </aside>
+                <section class="chat card">
+                    <div id="emptyChat" class="empty">
+                        <h2>Reksa</h2>
+                        <p>Escolha uma conversa ou encontre alguém pelo identificador.</p>
+                    </div>
+                    <div id="chatView" class="hidden chat-inner">
+                        <header class="chat-header"><strong id="chatTitle"></strong>
+                            <div id="chatSubtitle" class="muted"></div>
+                        </header>
+                        <div id="messages" class="messages"></div>
+                        <form id="messageForm" class="message-form"><input id="messageInput" maxlength="1000"
+                                placeholder="Digite uma mensagem..."><button class="primary">Enviar</button></form>
+                    </div>
+                </section>
 
-<dialog id="groupDialog"><form id="groupForm" class="dialog-content">
-<button type="button" class="close" id="closeGroupDialog">×</button><h2>Criar grupo</h2>
-<label>Nome do grupo<input id="groupName" maxlength="60" required></label>
-<label>Identificadores dos participantes<textarea id="groupMembers" placeholder="@ana&#10;@joao"></textarea></label>
-<small class="muted">Você entra automaticamente no grupo.</small>
-<button class="primary">Criar grupo</button><p id="groupMessage" class="message"></p>
-</form></dialog>
-<script src="script.js"></script>
+            </div>
+        </section>
+    </main>
+
+    <dialog id="userDialog">
+        <form id="userSearchForm" class="dialog-content">
+            <button type="button" class="close" id="closeUserDialog">×</button>
+            <h2>Nova conversa</h2>
+            <p class="muted">Digite o identificador exato da pessoa.</p><input id="userSearchInput" placeholder="@ana"
+                required>
+            <button class="primary">Encontrar</button>
+            <div id="userSearchResult"></div>
+        </form>
+    </dialog>
+
+    <dialog id="groupDialog">
+        <form id="groupForm" class="dialog-content">
+            <button type="button" class="close" id="closeGroupDialog">×</button>
+            <h2>Criar grupo</h2>
+            <label>Nome do grupo<input id="groupName" maxlength="60" required></label>
+            <label>Identificadores dos participantes<textarea id="groupMembers"
+                    placeholder="@ana&#10;@joao"></textarea></label>
+            <small class="muted">Você entra automaticamente no grupo.</small>
+            <button class="primary">Criar grupo</button>
+            <p id="groupMessage" class="message"></p>
+        </form>
+    </dialog>
+    <script src="script.js"></script>
 </body>
+
 </html>

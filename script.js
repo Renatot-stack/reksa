@@ -25,3 +25,105 @@ function esc(v) { return String(v).replaceAll("&", "&amp;").replaceAll("<", "&lt
 document.querySelectorAll(".tab").forEach(b => b.onclick = () => switchAuth(b.dataset.auth));
 $("loginForm").onsubmit = login; $("registerForm").onsubmit = register; $("logoutBtn").onclick = () => logout(true); $("messageForm").onsubmit = sendMessage; $("newChatBtn").onclick = openUserDialog; $("newGroupBtn").onclick = () => $("groupDialog").showModal(); $("userSearchForm").onsubmit = searchUser; $("groupForm").onsubmit = createGroup; $("closeUserDialog").onclick = () => $("userDialog").close(); $("closeGroupDialog").onclick = () => $("groupDialog").close();
 if (sessionToken) startApp();
+
+async function loadRequests() {
+    const list = document.getElementById("requestsList");
+    const count = document.getElementById("requestsCount");
+
+    if (!list || !count) return;
+
+    try {
+        const data = await api("requests");
+
+        if (!data.ok) {
+            throw new Error(data.error || "Erro ao carregar solicitações.");
+        }
+
+        const requests = data.requests || [];
+
+        count.textContent = requests.length;
+
+        if (requests.length === 0) {
+            list.innerHTML = `
+                <p class="empty-state">
+                    Nenhuma solicitação.
+                </p>
+            `;
+            return;
+        }
+
+        list.innerHTML = requests.map(request => `
+            <div class="request-item">
+                <div class="request-info">
+                    <p class="request-name">
+                        ${escapeHtml(request.nome)}
+                    </p>
+
+                    <p class="request-username">
+                        ${escapeHtml(request.username)}
+                    </p>
+                </div>
+
+                <div class="request-actions">
+                    <button
+                        class="accept-request"
+                        onclick="acceptRequest('${request.id}')">
+                        Aceitar
+                    </button>
+
+                    <button
+                        class="reject-request"
+                        onclick="rejectRequest('${request.id}')">
+                        Recusar
+                    </button>
+                </div>
+            </div>
+        `).join("");
+
+    } catch (error) {
+        console.error("Erro ao carregar solicitações:", error);
+    }
+}
+
+async function acceptRequest(requestId) {
+    try {
+        const data = await api("acceptRequest", {
+            requestId
+        });
+
+        if (!data.ok) {
+            throw new Error(data.error || "Não foi possível aceitar.");
+        }
+
+        await loadRequests();
+        await loadConversations();
+
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+
+async function rejectRequest(requestId) {
+    try {
+        const data = await api("rejectRequest", {
+            requestId
+        });
+
+        if (!data.ok) {
+            throw new Error(data.error || "Não foi possível recusar.");
+        }
+
+        await loadRequests();
+
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+loadRequests();
+
+setInterval(() => {
+    loadConversations();
+    loadRequests();
+}, 5000);
