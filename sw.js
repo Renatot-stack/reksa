@@ -1,0 +1,2 @@
+self.addEventListener("push",e=>{if(!e.data)return;const d=e.data.json();e.waitUntil(self.registration.showNotification(d.title||"Reksa",{body:d.body||"Nova mensagem",data:{conversationId:d.conversationId||null}}))});
+self.addEventListener("notificationclick",e=>{e.notification.close();const id=e.notification.data?.conversationId;const target=id?`./?conversation=${encodeURIComponent(id)}`:"./";e.waitUntil(clients.openWindow(target))});
