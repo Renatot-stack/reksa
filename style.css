@@ -11,7 +11,8 @@
     --dark: #4522ad;
     --border: #e2e4ea;
     --mine: #e8e0ff;
-    --danger: #c93636
+    --danger: #c93636;
+    --purple: rgb(155, 5, 155);
 }
 
 body {
